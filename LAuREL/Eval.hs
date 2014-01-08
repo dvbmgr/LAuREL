@@ -19,4 +19,3 @@ module LAuREL.Eval where
 
     evaluate l (Op o e f) = (l, (op l o) <$> (evaluate l e) (evaluate l f))
     evaluate l (If c e f) = (l, if (case evaluate l c of Bool t -> t) then evaluate l e else evaluate l f)
-    evaluatex l@(Lib a b) (Fun i t a e) = (Lib a ((drop (length a) t, evaluate (Lib a (map (\i -> []) [0..length a]) e):b))
