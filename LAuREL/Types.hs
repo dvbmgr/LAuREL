@@ -2,20 +2,21 @@ module LAuREL.Types where
 
      type Exprs = [Expr]
 
-     newtype Id = Id String
+     type Id = String
+     type FTypes = [String]
+     type Operator = String
+     type Args = [String]
 
      data Expr =  
-            EqOp EqOp Expr Expr
-          | Op Operator Expr Expr
+            Op Operator Expr Expr
           | If Expr Expr Expr
-          | Fun Id Expr
+          | Fun Id FTypes Args Expr
+          | Lambda Args Expr Exprs
+          | Call Id Exprs
           | Type Id
-          | Num Int
-          | Str String
+          | Integer Int
+          | String String
           | Float Float
           | Bool Bool
           | None
-          deriving (Eq)
-
-     data Operator = Operator String
           deriving (Eq, Show)

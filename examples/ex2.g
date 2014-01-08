@@ -1,14 +1,9 @@
 x : Integer
-x = 5
+x = 5.
 
-display : String -> Integer -> ()
-display s i =
-	if i > 5 ->
-		print s, i.toString
-	else
-		()
-	end
+display : String -> Integer -> None
+display s i = if (<4 == 3>) -> (print s, i) else 4 end.
 
-main : ()
+main : None
 main =
-	display "…", x
+	display "…", x.
