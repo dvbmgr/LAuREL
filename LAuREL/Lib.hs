@@ -1,26 +1,29 @@
 module LAuREL.Lib (stdlib) where
 
+	import Data.Functor
 	import LAuREL.Types
 
-	o_add :: Num a => a -> a -> a
-	o_add = (+)
+	o_add :: [Expr] -> IO Expr
+	o_add [Type (Integer a), Type (Integer b)] =
+		return $ Type $ Integer $ a + b
 
-	o_sub :: Num a => a -> a -> a 
-	o_sub = (-)
+	o_sub :: [Expr] -> IO Expr
+	o_sub [Type (Integer a), Type (Integer b)] =
+		return $ Type $ Integer $ a - b
 
-	o_mul :: Num a => a -> a -> a
-	o_mul = (*)
+	o_mul :: [Expr] -> IO Expr
+	o_mul [Type (Integer a), Type (Integer b)] =
+		return $ Type $ Integer $ a * b
 
-	f_print :: Show a => a -> IO ()
-	f_print = print
 
-	f_printf :: Show a => a -> a -> IO ()
-	f_printf a b = print a 
+	f_print :: [Expr] -> IO Expr
+	f_print [Type (String a)] =
+		print a >> return None
 
-	stdlib = ([
-				([("Integer", "Integer", "Integer")], o_add, "Adds a to b"),
-				([("Integer", "Integer", "Integer")], o_sub, "Substracts b to a"),
-				([("Integer", "Integer", "Integer")], o_mul, "Multiplies a by b")
-				],[
-				([["String", "None"]], f_print, "Shows a")
-				])
+	stdlib :: Lib
+	stdlib = Lib [
+				LibFunction "+" ["Integer", "Integer", "Integer"] ["a", "b"] o_add $ Just "Adds a to b",
+				LibFunction "-" ["Integer", "Integer", "Integer"] ["a", "b"] o_sub $ Just "Sub b to a",
+				LibFunction "*" ["Integer", "Integer", "Integer"] ["a", "b"] o_mul $ Just "Multiplies a by b",
+				LibFunction "print" ["String", "None"] ["a"] f_print $ Just "Prints a"
+			 ]

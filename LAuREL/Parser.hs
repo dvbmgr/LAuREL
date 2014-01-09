@@ -6,9 +6,9 @@ module LAuREL.Parser (parseLAuREL) where
 	import Data.Functor
 
 
-	parseLAuREL :: String -> Exprs
+	parseLAuREL :: String -> Expr
 	parseLAuREL input = case parse parseAll "parse error" input of
-		Right parsed -> parsed
+		Right parsed -> Root parsed
 		Left err -> error $ show err
 
 	parseAll :: Parser Exprs
@@ -31,6 +31,12 @@ module LAuREL.Parser (parseLAuREL) where
 				return $ a:b
 			) (string "->" <|> string "→")
 		spaces
+		doc <- optionMaybe (do
+			string "%"
+			spaces
+			c <- manyTill anyChar (try newline)
+			return $ c)
+
 		optional newline <?> "There's a return after a type definition"
 		string name <?> "Functions names have to match with type"
 		args <- many (try $ do
@@ -45,10 +51,10 @@ module LAuREL.Parser (parseLAuREL) where
 		spaces
 		char '.'
 		spaces
-		return $ Fun name types args d
+		return $ Fun name doc types args d 
 
 	parseExpr :: Parser Expr 
-	parseExpr = spaces *> (try parseLambda <|> try parseIf <|> try parseParenthsis <|> try parseFloat <|> try parseNumber <|> try parseString <|> try parseFunctionCall <|> try parseOp) <* spaces
+	parseExpr = spaces *> (try parseLambda <|> try parseIf <|> try parseParenthsis <|> try parseFloat <|> try parseNumber <|> try parseString <|> try parseAtom <|> try parseFunctionCall <|> try parseOp) <* spaces
 
 	parseOp :: Parser Expr 
 	parseOp = do
@@ -90,21 +96,27 @@ module LAuREL.Parser (parseLAuREL) where
 			a <- many digit
 			b <- char '.'
 			c <- many1 digit
-			return $ (case s of { Just _ -> '-'; Nothing -> ' ' }):(if length a == 0 then "0" else a)++b:c)
-		return (Float $ read d)
+			return $ (case s of { Just _ -> '-'; Nothing -> '0' }):(if length a == 0 then "0" else a)++b:c)
+		return (Type (Float $ read d))
 
 	parseNumber :: Parser Expr
 	parseNumber = do
 		s <- optionMaybe $ char '-'
 		d <- many1 digit 
-		return $ (Integer $ read $ (case s of { Just _ -> '-'; Nothing -> ' ' }):d)
+		return $ (Type (Integer $ read ((case s of { Just _ -> '-'; Nothing -> '0' }):d)))
 
 	parseString :: Parser Expr
 	parseString = do 
 		char '"'
 		c <- many $ noneOf "\""
 		char '"'
-		return $ String c
+		return $ Type (String c)
+
+	parseAtom :: Parser Expr 
+	parseAtom = do
+		char ':'
+		n <- many lower
+		return $ Atom n
 
 	parseFunctionCall :: Parser Expr
 	parseFunctionCall = do
