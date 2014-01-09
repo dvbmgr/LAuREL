@@ -1,5 +1,6 @@
 x : Integer -> Integer
-x t = t.
+x t = ((λab -> <ab * 2>) (x <<5 * -3> + -3>)).
 
 main : None % Main function
-main = (λab -> <ab * 2>) (x <<5 * -3> + -0.3>).	
+main = 
+	print (x 4).	

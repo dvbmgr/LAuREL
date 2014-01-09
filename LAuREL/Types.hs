@@ -17,7 +17,6 @@ module LAuREL.Types where
           | Call Id Exprs
           | Type VType
           | Atom String
-          | None
           | Root Exprs
           deriving (Eq, Show)
 
@@ -26,6 +25,7 @@ module LAuREL.Types where
           | Bool Bool
           | Integer Int
           | Float Float
+          | None
           deriving (Eq, Show)
 
      class TypeInfo a where
@@ -36,6 +36,7 @@ module LAuREL.Types where
           typeinfo (Bool _) = "Bool"
           typeinfo (Integer _) = "Integer"
           typeinfo (Float _) = "Float"
+          typeinfo None = "None"
 
      data LibFunction = LibFunction Id [String] [String] ([Expr] -> IO Expr) Doc
      data Lib = Lib [LibFunction] deriving (Eq, Show)

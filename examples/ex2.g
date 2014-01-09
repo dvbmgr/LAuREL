@@ -3,12 +3,12 @@ x = 5.
 
 display : String -> Integer -> None
 display s i = 
-	if (<4 == 3>) -> 
-		(print s, i) 
+	if (<4 == 4>) -> 
+		(print s)
 	else 
-		4 
+		(print 4) 
 	end.
 
 main : None
 main =
-	display "…", x.
+	print (display "…", x).

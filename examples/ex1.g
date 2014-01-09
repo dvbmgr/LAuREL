@@ -1,2 +1,7 @@
 main : None
-main = if (<4 == 3>) -> 413 else 4 end.
+main = 
+	if (<4 == 4>) -> 
+		(print 413) 
+	else 
+		(print 4)
+	end.

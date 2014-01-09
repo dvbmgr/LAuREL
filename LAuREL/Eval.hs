@@ -2,9 +2,14 @@ module LAuREL.Eval where
 
 	import LAuREL.Types
 	import LAuREL.Lib 
+
+	import Data.Functor
+	import Data.UUID.V4
+	import Control.Monad
 	
-	evalulateLAuREL :: Lib -> Expr -> IO Expr
-	evalulateLAuREL l e = 
+
+	evaluateLAuREL :: Lib -> Expr -> IO Expr
+	evaluateLAuREL l e = 
 			case eval l e of
 				(_, ed) -> ed
 		where 
@@ -23,8 +28,14 @@ module LAuREL.Eval where
 							case eval l c of
 								(_,p') -> p' >>= \p ->
 									case p of
-										Type (Bool True) -> case eval l e of (_,r) -> r
-										Type (Bool False) -> case eval l f of (_,r) -> r
+										Type (Bool True) -> 
+											case eval l e of 
+												(_,r) -> 
+													r
+										Type (Bool False) -> 
+											case eval l f of 
+												(_,r) -> 
+													r
 										_ -> error "Unvalid parameter for IF"
 						)
 
@@ -33,33 +44,51 @@ module LAuREL.Eval where
 							(   add_to_lib l i t a (\r -> 
 									case eval (
 										Lib (
-											map (\p ->
-												if 
-													typeinfo (case r !! p of Type a -> a) == t !! p 
-												then 
+											map (\p -> 
 													LibFunction (a !! p) [t !! p] [] (\[] -> 
-														let 
-															f = r !! p
-														in 
-														if
-															typeinfo (case f of Type a -> a) == last t
-														then
-															return $ f 
-														else
-															error "Return type is incorrect") Nothing
-												else
-													error "Types does not match"
-											) [0..length a]++n
+														(	case (eval l $ r !! p) of (_,rp') -> rp') >>= \rp -> 
+															(if
+																(typeinfo (case rp of Type a -> a) == t !! p) || (t !! p == "*")
+															then
+																return rp
+															else
+																error "Type is incorrect")) Nothing
+												) [0..length a-1]++n
 										)
-								) e of (_, e) -> e) d, 
-								return $ None
+								) e of (_, e') -> 
+									e' >>= \e -> if (typeinfo (case e of Type a -> a) == last t) || (last t == "*") then return $ e else error "Return type is incorrect") d, 
+								return $ Type None
 							)
 						else
 							error "Arguments length does not match to types"
 
+			eval l (Lambda a e f) = 
+						(	l,
+							do
+								name <- show <$> nextRandom
+								case eval l (Fun name Nothing ["*"|_ <- [0..length a]] a e) of
+									(l', _) -> 
+										case eval l' (Call name f) of 
+											(_, z) -> z
+						)
+
 			eval l (Call i e) = 
 						(   l,
-							get_fun_in_lib l i e
+								(sequence $ map (cw l) e) >>= get_fun_in_lib l i
+						)
+						where 
+							cw :: Lib -> Expr -> IO Expr
+							cw l a = 
+								case a of 
+									Type u -> return a
+									otherwise -> 
+										case eval l a of
+											(l', a') -> 
+												a' >>= cw l'
+
+			eval l u@(Type a) = 
+						(	l,
+							return $ u
 						)
 
 			eval l (Atom "true") = 
@@ -72,22 +101,18 @@ module LAuREL.Eval where
 							return $ Type $ Bool False
 						)
 
-			eval l n = 
-						(   l,
-							return $ n 
-						)	
-
 			eval l (Root f) =
 						(   l, 
-							(eval (
+							case (eval (
 								foldl (
 									\m n -> 
 										case (eval m n) of 
 											(z, _) -> fusion_lib z m
-								) l f) $ Call "main" [])
+								) l f) $ Call "main" []) of
+								(_,t) -> t
 						)
 
 			eval l v = 
 						(   l, 
-							error "Unexpected "++show v
+							error $ "Unexpected "++show v
 						)
