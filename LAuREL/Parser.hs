@@ -12,7 +12,13 @@ module LAuREL.Parser (parseLAuREL) where
 		Left err -> error $ show err
 
 	parseAll :: Parser Exprs
-	parseAll = spaces *> many1 (parseFunction <* optional newline) <* spaces
+	parseAll = spaces *> many1 ((try parseComment <|> parseFunction) <* optional newline) <* spaces
+
+	parseComment :: Parser Expr 
+	parseComment = do 
+		char '%'
+		c <- manyTill anyChar (try newline)
+		return $ Comment c
 
 	parseFunction :: Parser Expr 
 	parseFunction = do
@@ -42,7 +48,7 @@ module LAuREL.Parser (parseLAuREL) where
 		args <- many (try $ do
 			spaces
 			a <- lower  <?> "Functions names must begin with a lower case"
-			b <- many (alphaNum <|> char '\'') <?> "Functions names must only contain chars, digits or \"'\""
+			b <- many (alphaNum <|> char '\'' <|> char '_') <?> "Functions names must only contain chars, digits or \"'\""
 			return $ a:b)
 		spaces
 		char '='
@@ -122,7 +128,7 @@ module LAuREL.Parser (parseLAuREL) where
 	parseFunctionCall = do
 		name <- (do
 			a <- lower
-			b <- many (alphaNum <|> char '\'')
+			b <- many (alphaNum <|> char '\'' <|> char '_')
 			return $ a:b)
 		spaces
 		args <- sepBy parseExpr (char ',')

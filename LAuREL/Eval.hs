@@ -56,7 +56,13 @@ module LAuREL.Eval where
 												) [0..length a-1]++n
 										)
 								) e of (_, e') -> 
-									e' >>= \e -> if (typeinfo (case e of Type a -> a) == last t) || (last t == "*") then return $ e else error "Return type is incorrect") d, 
+									e' >>= \e -> 
+										if 
+											(typeinfo (case e of Type a -> a) == last t) || ("*" == last t)
+										then 
+											return $ e 
+										else 
+											error $ "Return type is incorrect") d, 
 								return $ Type None
 							)
 						else
@@ -74,7 +80,7 @@ module LAuREL.Eval where
 
 			eval l (Call i e) = 
 						(   l,
-								(sequence $ map (cw l) e) >>= get_fun_in_lib l i
+							(sequence $ map (cw l) e) >>= get_fun_in_lib l i
 						)
 						where 
 							cw :: Lib -> Expr -> IO Expr
@@ -110,6 +116,11 @@ module LAuREL.Eval where
 											(z, _) -> fusion_lib z m
 								) l f) $ Call "main" []) of
 								(_,t) -> t
+						)
+
+			eval l (Comment c) =
+						(	l,
+							return $ Type None
 						)
 
 			eval l v = 

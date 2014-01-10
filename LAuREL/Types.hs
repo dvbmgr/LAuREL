@@ -18,6 +18,7 @@ module LAuREL.Types where
           | Type VType
           | Atom String
           | Root Exprs
+          | Comment String
           deriving (Eq, Show)
 
      data VType =
