@@ -118,7 +118,7 @@ module LAuREL.Eval where
 								(_,t) -> t
 						)
 
-			eval l (Comment c) =
+			eval l (Comment _ c) =
 						(	l,
 							return $ Type None
 						)

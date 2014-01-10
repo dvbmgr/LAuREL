@@ -18,7 +18,7 @@ module LAuREL.Types where
           | Type VType
           | Atom String
           | Root Exprs
-          | Comment String
+          | Comment (Maybe String) String
           deriving (Eq, Show)
 
      data VType =
@@ -29,6 +29,17 @@ module LAuREL.Types where
           | None
           deriving (Eq, Show)
 
+     data Manual = 
+            Global String
+          | Author String
+          | Version String
+          | License String
+          | Date String
+          | ProjectName String
+          | Method String [String] String
+          | Defs [Manual]
+          deriving (Show)
+
      class TypeInfo a where
           typeinfo :: a -> String
 
@@ -38,6 +49,8 @@ module LAuREL.Types where
           typeinfo (Integer _) = "Integer"
           typeinfo (Float _) = "Float"
           typeinfo None = "None"
+
+
 
      data LibFunction = LibFunction Id [String] [String] ([Expr] -> IO Expr) Doc
      data Lib = Lib [LibFunction] deriving (Eq, Show)

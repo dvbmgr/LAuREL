@@ -17,8 +17,11 @@ module LAuREL.Parser (parseLAuREL) where
 	parseComment :: Parser Expr 
 	parseComment = do 
 		char '%'
+		spaces
+		d <- optionMaybe (try $ choice [string "author", string "date", string "license", string "version", string "name"] <* char ':' <* spaces)
+		spaces
 		c <- manyTill anyChar (try newline)
-		return $ Comment c
+		return $ Comment d c
 
 	parseFunction :: Parser Expr 
 	parseFunction = do

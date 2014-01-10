@@ -45,8 +45,17 @@ build-type:          Simple
 cabal-version:       >=1.8
 
 
-executable LAuREL
-  main-is: Main.hs             
+executable laurel
+  main-is: LAuREL.hs             
+  
+  -- Modules included in this executable, other than Main.
+  -- other-modules:       
+  
+  -- Other library packages from which modules are imported.
+  build-depends:       base ==4.5.*, parsec ==3.1.*, MissingH ==1.2.*, uuid ==1.2.*
+ 
+executable laura
+  main-is: LAuRA.hs             
   
   -- Modules included in this executable, other than Main.
   -- other-modules:       

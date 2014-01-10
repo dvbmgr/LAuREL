@@ -1,4 +1,9 @@
-% a bit more evoluted example 
+% This is the most advanced example done so far…
+
+% license: The BSD license
+% version: 0.0.1
+% name: A very simple calculator
+% author: David Baumgartner
 
 add : String → String → Integer % Adds a to b
 add a b = 
