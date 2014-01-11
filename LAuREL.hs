@@ -12,8 +12,8 @@ data Config = Config {
 parseArgs :: Config -> [String] -> Config
 parseArgs c [] = c
 parseArgs _ ("-h":xs) = 
-	error $ "This is the doc generator for LAuREL.\n"++
-				"Usage: laura [-h] [file|-]\n"++
+	error $ "This is the interpreter for LAuREL.\n"++
+				"Usage: laurel [-h] [file|-]\n"++
 				"\t\t-h\t shows this help\n"++
 				"If file equals to -, stdin will be read as input.\n" 
 parseArgs c ["-"] = 
