@@ -7,7 +7,7 @@ module LAuREL.Eval where
 	import Data.UUID.V4
 	import Control.Monad
 	
-
+	-- |Evaluates the AST
 	evaluateLAuREL :: Lib -> Expr -> IO Expr
 	evaluateLAuREL l e = 
 			case eval l e of

@@ -9,6 +9,7 @@ data Config = Config {
 			input :: String
 		}
 
+-- |Parsing arguments
 parseArgs :: Config -> [String] -> Config
 parseArgs c [] = c
 parseArgs _ ("-h":xs) = 

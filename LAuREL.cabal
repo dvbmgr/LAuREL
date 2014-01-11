@@ -19,7 +19,7 @@ synopsis:            Like A Real Language
 -- description:         
 
 -- URL for the project homepage or repository.
-homepage:            http://geekschmerzen.org/laurel/
+homepage:            http://geekschmerzen.org/LAuREL/
 
 -- The license under which the package is released.
 license:             BSD3
@@ -44,6 +44,15 @@ build-type:          Simple
 -- Constraint on the version of Cabal needed to build this package.
 cabal-version:       >=1.8
 
+library
+  hs-source-dirs: .
+  exposed-modules:
+    LAuREL.Doc
+    LAuREL.Eval
+    LAuREL.Lib 
+    LAuREL.Parser 
+    LAuREL.Types
+  build-depends:       base ==4.5.*, parsec ==3.1.*, MissingH ==1.2.*, uuid ==1.2.*
 
 executable laurel
   main-is: LAuREL.hs             

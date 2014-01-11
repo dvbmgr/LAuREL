@@ -55,6 +55,7 @@ module LAuREL.Lib (stdlib) where
 	f_error [Type (String a)] = 
 		error a
 
+	-- |The standard library
 	stdlib :: Lib
 	stdlib = Lib [
 				LibFunction "+" ["Integer", "Integer", "Integer"] ["a", "b"] o_add $ Just "Adds a to b",

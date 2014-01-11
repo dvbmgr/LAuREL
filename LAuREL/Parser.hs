@@ -6,14 +6,17 @@ module LAuREL.Parser (parseLAuREL) where
 	import Data.Functor
 
 
+	-- |Parsing interface
 	parseLAuREL :: String -> Expr
 	parseLAuREL input = case parse parseAll "parse error" input of
 		Right parsed -> Root parsed
 		Left err -> error $ show err
 
+	-- |Parses comments and functions
 	parseAll :: Parser Exprs
 	parseAll = spaces *> many1 ((try parseComment <|> parseFunction) <* optional newline) <* spaces
 
+	-- |Parses comments
 	parseComment :: Parser Expr 
 	parseComment = do 
 		char '%'
@@ -23,6 +26,7 @@ module LAuREL.Parser (parseLAuREL) where
 		c <- manyTill anyChar (try newline)
 		return $ Comment d c
 
+	-- |Parses functions
 	parseFunction :: Parser Expr 
 	parseFunction = do
 		name <- (do
@@ -62,9 +66,11 @@ module LAuREL.Parser (parseLAuREL) where
 		spaces
 		return $ Fun name doc types args d 
 
+	-- |Parses all inline expressions
 	parseExpr :: Parser Expr 
 	parseExpr = spaces *> (try parseLambda <|> try parseIf <|> try parseParenthsis <|> try parseFloat <|> try parseNumber <|> try parseString <|> try parseAtom <|> try parseFunctionCall <|> try parseOp) <* spaces
 
+	-- |Parses the operators
 	parseOp :: Parser Expr 
 	parseOp = do
 		char '<'
@@ -77,6 +83,7 @@ module LAuREL.Parser (parseLAuREL) where
 		char '>'
 		return $ Op o a b
 
+	-- |Parsing the if structures
 	parseIf :: Parser Expr
 	parseIf = do
 		string "if"
@@ -94,10 +101,12 @@ module LAuREL.Parser (parseLAuREL) where
 		string "end"
 		return $ If c a b
 
+	-- |Parsing the parenthesis
 	parseParenthsis :: Parser Expr
 	parseParenthsis = do
 		between (char '(' <* optional spaces) (optional spaces *> char ')') parseExpr
 
+	-- |Parsing floating numbers
 	parseFloat :: Parser Expr 
 	parseFloat = do
 		d <- (do
@@ -108,12 +117,14 @@ module LAuREL.Parser (parseLAuREL) where
 			return $ (case s of { Just _ -> '-'; Nothing -> '0' }):(if length a == 0 then "0" else a)++b:c)
 		return (Type (Float $ read d))
 
+	-- |Parsing numbers
 	parseNumber :: Parser Expr
 	parseNumber = do
 		s <- optionMaybe $ char '-'
 		d <- many1 digit 
 		return $ (Type (Integer $ read ((case s of { Just _ -> '-'; Nothing -> '0' }):d)))
 
+	-- |Parsing strings
 	parseString :: Parser Expr
 	parseString = do 
 		char '"'
@@ -121,12 +132,14 @@ module LAuREL.Parser (parseLAuREL) where
 		char '"'
 		return $ Type (String c)
 
+	-- |Parsing atoms
 	parseAtom :: Parser Expr 
 	parseAtom = do
 		char ':'
 		n <- many lower
 		return $ Atom n
 
+	-- |Parsing functions call
 	parseFunctionCall :: Parser Expr
 	parseFunctionCall = do
 		name <- (do
@@ -137,6 +150,7 @@ module LAuREL.Parser (parseLAuREL) where
 		args <- sepBy parseExpr (char ',')
 		return $ Call name args
 
+	-- |Parsing lambda-expressions
 	parseLambda :: Parser Expr
 	parseLambda = do
 		char '('

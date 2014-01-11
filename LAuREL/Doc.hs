@@ -3,6 +3,7 @@ module LAuREL.Doc where
 	import LAuREL.Types
 	import Data.String.Utils
 
+	-- |Converts what the parser parsed into definition list
 	docify :: Expr -> Manual
 	docify (Root e) =
 		docify' e (Defs [])
@@ -28,6 +29,7 @@ module LAuREL.Doc where
 			docify' (_:xs) d =
 				docify' xs d
 
+	-- |Output definition to into Markdown
 	markdownify :: Manual -> String
 	markdownify (Defs a) =
 			(if
