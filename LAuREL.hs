@@ -1,4 +1,4 @@
-import LAuREL.Types
+limport LAuREL.Types
 import LAuREL.Parser
 import LAuREL.Eval
 import LAuREL.Lib
