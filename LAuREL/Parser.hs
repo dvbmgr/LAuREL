@@ -30,16 +30,18 @@ module LAuREL.Parser (parseLAuREL) where
 	parseFunction :: Parser Expr 
 	parseFunction = do
 		name <- (do
-			a <- lower <?> "Functions names must begin with a lower case"
-			b <- many (alphaNum <|> char '\'') <?> "Functions names must only contain chars, digits or \"'\""
+			a <- lower 
+			b <- many (alphaNum <|> char '\'') 
 			return $ a:b)
 		spaces
-		char ':' <?> "Functions must have a type definition"
+		char ':'
 		spaces
 		types <- sepBy1 (do 
 				spaces
-				a <- upper <?> "Types have to begin with a upper case"
-				b <- many1 alphaNum <?> "Types could only contain chars"
+				t <- optional $ char '['
+				a <- upper
+				b <- many1 alphaNum 
+				optional $ char ']'
 				spaces
 				return $ a:b
 			) (string "->" <|> string "→")
@@ -50,12 +52,12 @@ module LAuREL.Parser (parseLAuREL) where
 			c <- manyTill anyChar (try newline)
 			return $ c)
 
-		optional newline <?> "There's a return after a type definition"
-		string name <?> "Functions names have to match with type"
+		optional newline
+		string name
 		args <- many (try $ do
 			spaces
-			a <- lower  <?> "Functions names must begin with a lower case"
-			b <- many (alphaNum <|> char '\'' <|> char '_') <?> "Functions names must only contain chars, digits or \"'\""
+			a <- lower
+			b <- many (alphaNum <|> char '\'' <|> char '_')
 			return $ a:b)
 		spaces
 		char '='
@@ -77,7 +79,7 @@ module LAuREL.Parser (parseLAuREL) where
 		spaces
 		a <- parseExpr
 		spaces
-		o <- many1 $ oneOf "></=+-!$&|*"
+		o <- many1 $ oneOf "></=+-!$&|*@"
 		spaces
 		b <- parseExpr
 		char '>'

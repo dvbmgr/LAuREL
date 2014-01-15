@@ -1,6 +1,7 @@
 module LAuREL.Lib (stdlib) where
 
 	import Data.Functor
+	import Data.String.Utils
 	import LAuREL.Types
 
 	o_add :: [Expr] -> IO Expr
@@ -18,6 +19,10 @@ module LAuREL.Lib (stdlib) where
 	o_forget :: [Expr] -> IO Expr
 	o_forget [a,b] =
 		return $ b
+
+	o_at :: [Expr] -> IO Expr 
+	o_at [Type (List a), Type (Integer s)] = 
+		return $ Type (a !! s)
 
 	b_eq :: [Expr] -> IO Expr
 	b_eq [Type (Integer a), Type (Integer b)] =
@@ -55,17 +60,30 @@ module LAuREL.Lib (stdlib) where
 	f_error [Type (String a)] = 
 		error a
 
+	f_split :: [Expr] -> IO Expr 
+	f_split [Type (String del), Type (String str)] = 
+		return $ Type (List (map (String) sp))
+		where 
+			sp = split del str
+
+	f_readfile :: [Expr] -> IO Expr 
+	f_readfile [Type (String a)] = 
+		readFile a >>= return . Type . String
+
 	-- |The standard library
 	stdlib :: Lib
 	stdlib = Lib [
 				LibFunction "+" ["Integer", "Integer", "Integer"] ["a", "b"] o_add $ Just "Adds a to b",
 				LibFunction "-" ["Integer", "Integer", "Integer"] ["a", "b"] o_sub $ Just "Sub b to a",
 				LibFunction "*" ["Integer", "Integer", "Integer"] ["a", "b"] o_mul $ Just "Multiplies a by b",
+				LibFunction "@" ["[String]", "Integer", "String"] ["a", "b"] o_at $ Just "Gets element b of a",
 				LibFunction ">>" ["*", "*", "*"] ["a", "b"] o_forget $ Just "Removes the previous functions value",
 				LibFunction "==" ["Integer", "Integer", "Bool"] ["a", "b"] b_eq $ Just "Checks the equallity",
 				LibFunction "str_to_int" ["String", "Integer"] ["a"] f_str_to_int $ Just "Converts string to integer",
 				LibFunction "str_to_float" ["String", "Float"] ["a"] f_str_to_float $ Just "Converts string to float",
+				LibFunction "split" ["String", "String", "[String]"] ["a", "b"] f_split $ Just "Splits b at deliminators a",
 				LibFunction "print" ["String", "None"] ["a"] f_print $ Just "Prints a",
 				LibFunction "input" ["String"] [] f_input $ Just "Asks for input",
-				LibFunction "error" ["String", "*"] ["a"] f_error $ Just "Stops the program and shows the message"
+				LibFunction "error" ["String", "*"] ["a"] f_error $ Just "Stops the program and shows the message",
+				LibFunction "readfile" ["String", "String"] ["a"] f_readfile $ Just "Reads the givent file"
 			 ]
