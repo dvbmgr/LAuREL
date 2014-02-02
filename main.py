@@ -6,10 +6,14 @@ from LAuREL import errors
 from LAuREL.parser import r_input as p_input
 from LAuREL.lexer import r_input as l_input, find_column
 from LAuREL.colors import bcolors
+from LAuREL.interpreter import core 
+from LAuREL.stdlib import stdlib
+
+import pprint
 
 def call(args, filename):
 	with open(filename) as f:
-		d = f.read()
+		d = f.read().expandtabs()
 		a_lineno = -1
 		if len(args) < 2 or len(args) > 3:
 			print("Usage: python example.py [-p|-l]", file=sys.stderr)
@@ -31,7 +35,12 @@ def call(args, filename):
 				print("\t", bcolors.BOLD, r.value, bcolors.ENDC, "is lexed as", bcolors.TOKEN, r.type, bcolors.ENDC)
 		elif args[1] == "-p":
 			try:
-				print(p_input(filename, d))
+				print(p_input(filename, d)) 
+			except errors.LAuRELError, e:
+				print(e)
+		elif args[1] == "-i":
+			try:
+				core((filename, d), stdlib, p_input(filename, d))
 			except errors.LAuRELError, e:
 				print(e)
 

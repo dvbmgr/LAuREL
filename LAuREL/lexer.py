@@ -6,23 +6,25 @@ import pprint
 import ast 
 import errors
 
+input_data = ""
+
 tokens = (
    'LET',
+   'IN',
    'IF',
    'ELSE',
    'END',
    'CASE',
    'OF',
+   'OPERATOR',
+   'RIGHT_OP',
    'LPAREN',
    'RPAREN',
    'LBRACE',
    'RBRACE',
    'LSBRACE',
    'RSBRACE',
-   'ASSIGN',
    'COMMA',
-   'OPERATOR',
-   'RIGHT_OP',
    'NAME',
    'TYPE',
    'FLOAT',
@@ -35,11 +37,13 @@ tokens = (
    'TYPE_SEPARATOR',
    'STRING',
    'ATOM',
-   'COMMENT'
+   'COMMENT',
+   'ASSIGN',
 )
 
 reserved = {
    'let' : 'LET',
+   'in' : 'IN',
    'if' : 'IF',
    'else' : 'ELSE',
    'end' : 'END',
@@ -47,21 +51,27 @@ reserved = {
    'of' : 'OF',
 }
 
-
+t_LET = r'let'
+t_IN = r'in'
+t_IF = r'if'
+t_ELSE = r'else'
+t_END = r'end'
+t_CASE = r'case'
+t_OF = r'of'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_LBRACE = r'\['
 t_RBRACE = r'\]'
 t_LSBRACE = r'\{'
 t_RSBRACE = r'\}'
-t_ASSIGN = r'='
+t_OPERATOR = r'(?!(:?->|<-))[\+\-*<>\/\?@=]+'
+t_RIGHT_OP = r'(:?\$+)'
+t_NAME = r'(?!let|in|if|else|end|case|of)[a-z_][a-zA-Z0-9_]*\'?'
+t_TYPE = r'[A-Z][a-zA-Z]+'
+t_ASSIGN = r':='
 t_COMMA = r','
 t_TO = r'(:?(:?\->)|→)'
 t_FROM = r'(:?(:?<\-)|←)'
-t_OPERATOR = r'(:?[\+\-*<>\/\?@]+|(:?[\+\-*<>\/$\?]*[=]{2,}))'
-t_RIGHT_OP = r'(:?\$+|\.+)'
-t_NAME = r'[a-z_][a-zA-Z0-9_]*\'?'
-t_TYPE = r'[A-Z][a-zA-Z]+'
 
 
 def t_FLOAT(t):

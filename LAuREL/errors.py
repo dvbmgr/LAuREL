@@ -1,6 +1,8 @@
 from colors import bcolors
 from lexer import find_column
 
+import pprint
+
 class LAuRELError(Exception):
 	token = None
 	message = ""
@@ -16,8 +18,8 @@ class LAuRELError(Exception):
 		lines_bf = "\n".join([bcolors.OK + "\t| " + bcolors.ENDC + z for z in self.input_data.split("\n")[(line-3):(line-1)]])
 		lines_ot = bcolors.ERROR + "\n\t| " + bcolors.ENDC + bcolors.BOLD + self.input_data.split("\n")[line-1] + bcolors.ENDC
 		lines_af = "\n".join([bcolors.OK + "\t| " + bcolors.ENDC + z for z in self.input_data.split("\n")[(line):(line+2)]])
-		lines = lines_bf + lines_ot + bcolors.ERROR + "\n\t| " + (" "*(column-1)) + ("^"*(len(token.value))) + bcolors.ENDC + "\n" + lines_af
-		self.message = (bcolors.ERROR + self.errclass + ": " + bcolors.ENDC + message + " near " + bcolors.BOLD + token.value + bcolors.ENDC + " (which is lexed as " + bcolors.TOKEN + " " + token.type + " " + bcolors.ENDC + ")" + "\n" +
+		lines = lines_bf + lines_ot + bcolors.ERROR + "\n\t| " + (" "*(column-1)) + ("^"*(len(str(token.value)))) + bcolors.ENDC + "\n" + lines_af
+		self.message = (bcolors.ERROR + self.errclass + ": " + bcolors.ENDC + message + " near " + bcolors.BOLD + str(token.value) + bcolors.ENDC + " (which is lexed as " + bcolors.TOKEN + " " + token.type + " " + bcolors.ENDC + ")" + "\n" +
 				bcolors.INFORMATION + "[ " + self.filename + " : " + str(line) + ":" + str(column) + " ]  " + "\n" + lines)
 
 	def __str__(self):
@@ -31,3 +33,6 @@ class LAuRELUnvalidToken(LAuRELError):
 
 class LAuRELTypeError(LAuRELError):
 	errclass = "Unvalid type"
+
+class LAuRELAlreadlyDefined(LAuRELError):
+	errclass = "Already defined"

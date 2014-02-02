@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'M\xfbm\xe9\x9f\xf2\xad\x98\xa8Z\x82\xd0\xab\x88n\xac'
+_lr_signature = "\xc2Bg\xb8\x06|'\xbc)\x11\x02^\x984\x07T"
     
-_lr_action_items = {'RIGHT_OP':([17,18,19,23,24,25,27,28,31,36,37,42,45,47,48,49,51,53,55,56,57,],[-19,-18,-20,-11,38,-17,38,38,-25,38,-10,-14,-24,38,38,38,38,38,-23,38,-22,]),'DOT':([17,18,19,23,24,25,31,36,37,42,45,47,48,49,53,55,57,],[-19,-18,-20,-11,39,-17,-25,-13,-10,-14,-24,-12,-16,-15,-21,-23,-22,]),'STRING':([22,29,30,32,33,34,35,44,46,],[35,-27,35,-28,-31,-29,-30,-26,35,]),'RPAREN':([17,18,19,23,25,27,31,36,37,42,45,47,48,49,53,55,57,],[-19,-18,-20,-11,-17,42,-25,-13,-10,-14,-24,-12,-16,-15,-21,-23,-22,]),'TO':([6,7,8,11,12,14,15,17,18,19,23,25,28,31,36,37,41,42,45,47,48,49,53,55,57,],[-6,-5,10,-9,-8,-4,-7,-19,-18,-20,-11,-17,43,-25,-13,-10,50,-14,-24,-12,-16,-15,-21,-23,-22,]),'COMMA':([29,30,32,33,34,35,44,],[-27,46,-28,-31,-29,-30,-26,]),'INTEGER':([22,29,30,32,33,34,35,44,46,],[34,-27,34,-28,-31,-29,-30,-26,34,]),'TYPE_SEPARATOR':([3,],[5,]),'ASSIGN':([11,12,13,15,],[-9,-8,16,-7,]),'$end':([1,2,4,39,],[-2,0,-1,-3,]),'END':([17,18,19,23,25,31,36,37,42,45,47,48,49,53,55,56,57,],[-19,-18,-20,-11,-17,-25,-13,-10,-14,-24,-12,-16,-15,-21,-23,57,-22,]),'RBRACE':([22,29,30,32,33,34,35,44,52,],[31,-27,45,-28,-31,-29,-30,-26,55,]),'ELSE':([17,18,19,23,25,31,36,37,42,45,47,48,49,51,53,55,57,],[-19,-18,-20,-11,-17,-25,-13,-10,-14,-24,-12,-16,-15,54,-21,-23,-22,]),'LPAREN':([16,17,18,19,20,21,23,25,31,36,37,38,40,42,43,45,47,48,49,50,53,54,55,57,],[20,-19,-18,-20,20,20,20,-17,-25,-13,20,20,20,-14,20,-24,-12,-16,-15,20,-21,20,-23,-22,]),'ATOM':([22,29,30,32,33,34,35,44,46,],[33,-27,33,-28,-31,-29,-30,-26,33,]),'OPERATOR':([17,18,19,23,24,25,27,28,31,36,37,42,45,47,48,49,51,53,55,56,57,],[-19,-18,-20,-11,40,-17,40,40,-25,40,-10,-14,-24,40,-16,-15,40,40,-23,40,-22,]),'IF':([16,17,18,19,20,21,23,25,31,36,37,38,40,42,43,45,47,48,49,50,53,54,55,57,],[21,-19,-18,-20,21,21,21,-17,-25,-13,21,21,21,-14,21,-24,-12,-16,-15,21,-21,21,-23,-22,]),'LBRACE':([16,17,18,19,20,21,23,25,31,36,37,38,40,42,43,45,47,48,49,50,53,54,55,57,],[22,-19,-18,-20,22,22,22,-17,-25,-13,22,22,22,-14,22,-24,-12,-16,-15,22,-21,22,-23,-22,]),'NAME':([0,1,2,4,6,7,8,9,11,12,13,14,15,16,17,18,19,20,21,23,25,26,31,36,37,38,39,40,41,42,43,45,47,48,49,50,53,54,55,57,],[3,-2,3,-1,-6,-5,9,11,-9,-8,11,-4,-7,23,-19,-18,-20,23,23,23,-17,11,-25,-13,23,23,-3,23,11,-14,23,-24,-12,-16,-15,23,-21,23,-23,-22,]),'FLOAT':([22,29,30,32,33,34,35,44,46,],[32,-27,32,-28,-31,-29,-30,-26,32,]),'TYPE':([5,10,],[6,6,]),'LAMBDA':([16,17,18,19,20,21,23,25,31,36,37,38,40,42,43,45,47,48,49,50,53,54,55,57,],[26,-19,-18,-20,26,26,26,-17,-25,-13,26,26,26,-14,26,-24,-12,-16,-15,26,-21,26,-23,-22,]),}
+_lr_action_items = {'RIGHT_OP':([17,18,19,20,21,23,25,27,28,29,30,32,33,36,37,38,42,44,47,49,50,51,53,55,57,58,59,],[-34,-21,-19,-31,-32,-33,-22,-12,39,-30,-13,39,39,-27,39,-10,-11,-16,-26,39,39,39,39,39,-25,39,-24,]),'DOT':([17,18,19,20,21,23,25,27,28,29,30,36,37,38,42,44,47,49,50,51,55,57,59,],[-34,-21,-19,-31,-32,-33,-22,-12,40,-30,-13,-27,-15,-10,-11,-16,-26,-14,-18,-17,-23,-25,-24,]),'STRING':([16,17,18,19,20,21,22,23,24,25,26,27,29,30,34,35,36,37,38,39,41,42,44,45,46,47,48,49,50,51,52,55,56,57,59,],[21,-34,-21,-19,-31,-32,21,-33,21,-22,21,21,-30,21,-29,21,-27,-15,21,21,21,21,-16,21,-28,-26,21,-14,-18,-17,21,-23,21,-25,-24,]),'RPAREN':([17,18,19,20,21,23,25,27,29,30,32,36,37,38,42,44,47,49,50,51,55,57,59,],[-34,-21,-19,-31,-32,-33,-22,-12,-30,-13,44,-27,-15,-10,-11,-16,-26,-14,-18,-17,-23,-25,-24,]),'TO':([6,7,8,11,12,14,15,17,18,19,20,21,23,25,27,29,30,33,36,37,38,42,43,44,47,49,50,51,55,57,59,],[-6,-5,10,-9,-8,-4,-7,-34,-21,-19,-31,-32,-33,-22,-12,-30,-13,45,-27,-15,-10,-11,52,-16,-26,-14,-18,-17,-23,-25,-24,]),'COMMA':([17,20,21,23,29,34,35,36,46,47,57,],[-34,-31,-32,-33,-30,-29,48,-27,-28,-26,-25,]),'INTEGER':([16,17,18,19,20,21,22,23,24,25,26,27,29,30,34,35,36,37,38,39,41,42,44,45,46,47,48,49,50,51,52,55,56,57,59,],[20,-34,-21,-19,-31,-32,20,-33,20,-22,20,20,-30,20,-29,20,-27,-15,20,20,20,20,-16,20,-28,-26,20,-14,-18,-17,20,-23,20,-25,-24,]),'TYPE_SEPARATOR':([3,],[5,]),'ASSIGN':([11,12,13,15,],[-9,-8,16,-7,]),'$end':([1,2,4,40,],[-2,0,-1,-3,]),'END':([17,18,19,20,21,23,25,27,29,30,36,37,38,42,44,47,49,50,51,55,57,58,59,],[-34,-21,-19,-31,-32,-33,-22,-12,-30,-13,-27,-15,-10,-11,-16,-26,-14,-18,-17,-23,-25,59,-24,]),'RBRACE':([17,20,21,23,26,29,34,35,36,46,47,54,57,],[-34,-31,-32,-33,36,-30,-29,47,-27,-28,-26,57,-25,]),'ELSE':([17,18,19,20,21,23,25,27,29,30,36,37,38,42,44,47,49,50,51,53,55,57,59,],[-34,-21,-19,-31,-32,-33,-22,-12,-30,-13,-27,-15,-10,-11,-16,-26,-14,-18,-17,56,-23,-25,-24,]),'LPAREN':([16,17,18,19,20,21,22,23,24,25,27,29,30,36,37,38,39,41,42,44,45,47,49,50,51,52,55,56,57,59,],[22,-34,-21,-19,-31,-32,22,-33,22,-22,22,-30,22,-27,-15,22,22,22,22,-16,22,-26,-14,-18,-17,22,-23,22,-25,-24,]),'ATOM':([16,17,18,19,20,21,22,23,24,25,26,27,29,30,34,35,36,37,38,39,41,42,44,45,46,47,48,49,50,51,52,55,56,57,59,],[23,-34,-21,-19,-31,-32,23,-33,23,-22,23,23,-30,23,-29,23,-27,-15,23,23,23,23,-16,23,-28,-26,23,-14,-18,-17,23,-23,23,-25,-24,]),'OPERATOR':([17,18,19,20,21,23,25,27,28,29,30,32,33,36,37,38,42,44,47,49,50,51,53,55,57,58,59,],[-34,-21,-19,-31,-32,-33,-22,-12,41,-30,-13,41,41,-27,41,-10,-11,-16,-26,41,-18,-17,41,41,-25,41,-24,]),'IF':([16,17,18,19,20,21,22,23,24,25,27,29,30,36,37,38,39,41,42,44,45,47,49,50,51,52,55,56,57,59,],[24,-34,-21,-19,-31,-32,24,-33,24,-22,24,-30,24,-27,-15,24,24,24,24,-16,24,-26,-14,-18,-17,24,-23,24,-25,-24,]),'LBRACE':([16,17,18,19,20,21,22,23,24,25,26,27,29,30,34,35,36,37,38,39,41,42,44,45,46,47,48,49,50,51,52,55,56,57,59,],[26,-34,-21,-19,-31,-32,26,-33,26,-22,26,26,-30,26,-29,26,-27,-15,26,26,26,26,-16,26,-28,-26,26,-14,-18,-17,26,-23,26,-25,-24,]),'NAME':([0,1,2,4,6,7,8,9,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,27,29,30,31,36,37,38,39,40,41,42,43,44,45,47,49,50,51,52,55,56,57,59,],[3,-2,3,-1,-6,-5,9,11,-9,-8,11,-4,-7,27,-34,-21,-19,-31,-32,27,-33,27,-22,27,-30,27,11,-27,-15,27,27,-3,27,27,11,-16,27,-26,-14,-18,-17,27,-23,27,-25,-24,]),'FLOAT':([16,17,18,19,20,21,22,23,24,25,26,27,29,30,34,35,36,37,38,39,41,42,44,45,46,47,48,49,50,51,52,55,56,57,59,],[29,-34,-21,-19,-31,-32,29,-33,29,-22,29,29,-30,29,-29,29,-27,-15,29,29,29,29,-16,29,-28,-26,29,-14,-18,-17,29,-23,29,-25,-24,]),'TYPE':([5,10,],[6,6,]),'LAMBDA':([16,17,18,19,20,21,22,23,24,25,27,29,30,36,37,38,39,41,42,44,45,47,49,50,51,52,55,56,57,59,],[31,-34,-21,-19,-31,-32,31,-33,31,-22,31,-30,31,-27,-15,31,31,31,31,-16,31,-26,-14,-18,-17,31,-23,31,-25,-24,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'function':([0,2,],[1,4,]),'functions':([0,],[2,]),'subterms':([22,],[30,]),'terms':([16,20,21,23,37,38,40,43,50,54,],[17,17,17,17,17,17,17,17,17,17,]),'expr':([16,20,21,23,37,38,40,43,50,54,],[24,27,28,36,47,48,49,51,53,56,]),'term':([22,30,46,],[29,44,52,]),'argument':([9,13,26,41,],[12,15,12,15,]),'exprs':([23,],[37,]),'call':([16,20,21,23,37,38,40,43,50,54,],[19,19,19,19,19,19,19,19,19,19,]),'arguments':([9,26,],[13,41,]),'if':([16,20,21,23,37,38,40,43,50,54,],[18,18,18,18,18,18,18,18,18,18,]),'type':([5,10,],[7,14,]),'types':([5,],[8,]),'lambda':([16,20,21,23,37,38,40,43,50,54,],[25,25,25,25,25,25,25,25,25,25,]),}
+_lr_goto_items = {'function':([0,2,],[1,4,]),'functions':([0,],[2,]),'subterms':([26,],[35,]),'term':([16,22,24,26,27,30,35,38,39,41,42,45,48,52,56,],[25,25,25,34,25,25,46,25,25,25,25,25,54,25,25,]),'expr':([16,22,24,27,30,38,39,41,42,45,52,56,],[28,32,33,37,37,49,50,51,49,53,55,58,]),'argument':([9,13,31,43,],[12,15,12,15,]),'exprs':([27,30,],[38,42,]),'call':([16,22,24,27,30,38,39,41,42,45,52,56,],[19,19,19,19,19,19,19,19,19,19,19,19,]),'arguments':([9,31,],[13,43,]),'terms':([16,22,24,26,27,30,35,38,39,41,42,45,48,52,56,],[17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,]),'lambda':([16,22,24,27,30,38,39,41,42,45,52,56,],[30,30,30,30,30,30,30,30,30,30,30,30,]),'type':([5,10,],[7,14,]),'types':([5,],[8,]),'if':([16,22,24,27,30,38,39,41,42,45,52,56,],[18,18,18,18,18,18,18,18,18,18,18,18,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -26,36 +26,38 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> functions","S'",1,None,None,None),
-  ('functions -> functions function','functions',2,'p_functions_list','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',16),
-  ('functions -> function','functions',1,'p_functions','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',22),
-  ('function -> NAME TYPE_SEPARATOR types NAME arguments ASSIGN expr DOT','function',8,'p_function','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',28),
-  ('types -> types TO type','types',3,'p_types_list','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',38),
-  ('types -> type','types',1,'p_types','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',44),
-  ('type -> TYPE','type',1,'p_type','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',50),
-  ('arguments -> arguments argument','arguments',2,'p_arguments_list','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',56),
-  ('arguments -> argument','arguments',1,'p_arguments','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',62),
-  ('argument -> NAME','argument',1,'p_argument','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',68),
-  ('call -> NAME exprs','call',2,'p_call_exprs','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',74),
-  ('call -> NAME','call',1,'p_call','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',80),
-  ('exprs -> exprs expr','exprs',2,'p_exprs_list','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',88),
-  ('exprs -> expr','exprs',1,'p_exprs','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',94),
-  ('expr -> LPAREN expr RPAREN','expr',3,'p_expr_parenthesis','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',100),
-  ('expr -> expr OPERATOR expr','expr',3,'p_expr_operator','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',106),
-  ('expr -> expr RIGHT_OP expr','expr',3,'p_expr_operator','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',107),
-  ('expr -> lambda','expr',1,'p_expr_lambda','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',113),
-  ('expr -> if','expr',1,'p_expr_if','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',119),
-  ('expr -> terms','expr',1,'p_expr_terms','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',125),
-  ('expr -> call','expr',1,'p_expr_call','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',131),
-  ('lambda -> LAMBDA arguments TO expr','lambda',4,'p_lambda','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',137),
-  ('if -> IF expr TO expr ELSE expr END','if',7,'p_if','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',143),
-  ('terms -> LBRACE subterms COMMA term RBRACE','terms',5,'p_terms_head','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',149),
-  ('terms -> LBRACE subterms RBRACE','terms',3,'p_terms_single','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',155),
-  ('terms -> LBRACE RBRACE','terms',2,'p_terms_empty','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',161),
-  ('subterms -> subterms term','subterms',2,'p_subterms_list','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',167),
-  ('subterms -> term','subterms',1,'p_subterms','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',173),
-  ('term -> FLOAT','term',1,'p_term_float','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',179),
-  ('term -> INTEGER','term',1,'p_term_integer','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',185),
-  ('term -> STRING','term',1,'p_term_string','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',191),
-  ('term -> ATOM','term',1,'p_term_atom','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',197),
-  ('comment -> COMMENT','comment',1,'p_comment','/Users/dab/Documents/Developpement/LAuREL-ply/LAuREL/parser.py',203),
+  ('functions -> functions function','functions',2,'p_functions_list','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',16),
+  ('functions -> function','functions',1,'p_functions','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',22),
+  ('function -> NAME TYPE_SEPARATOR types NAME arguments ASSIGN expr DOT','function',8,'p_function','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',28),
+  ('types -> types TO type','types',3,'p_types_list','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',35),
+  ('types -> type','types',1,'p_types','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',41),
+  ('type -> TYPE','type',1,'p_type','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',47),
+  ('arguments -> arguments argument','arguments',2,'p_arguments_list','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',53),
+  ('arguments -> argument','arguments',1,'p_arguments','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',59),
+  ('argument -> NAME','argument',1,'p_argument','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',65),
+  ('call -> NAME exprs','call',2,'p_call_exprs','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',71),
+  ('call -> lambda exprs','call',2,'p_call_exprs','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',72),
+  ('call -> NAME','call',1,'p_call','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',78),
+  ('call -> lambda','call',1,'p_call','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',79),
+  ('exprs -> exprs expr','exprs',2,'p_exprs_list','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',86),
+  ('exprs -> expr','exprs',1,'p_exprs','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',92),
+  ('expr -> LPAREN expr RPAREN','expr',3,'p_expr_parenthesis','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',98),
+  ('expr -> expr OPERATOR expr','expr',3,'p_expr_operator','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',104),
+  ('expr -> expr RIGHT_OP expr','expr',3,'p_expr_operator','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',105),
+  ('expr -> call','expr',1,'p_expr_call','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',111),
+  ('expr -> lambda','expr',1,'p_expr_lambda','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',117),
+  ('expr -> if','expr',1,'p_expr_if','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',123),
+  ('expr -> term','expr',1,'p_expr_terms','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',129),
+  ('lambda -> LAMBDA arguments TO expr','lambda',4,'p_lambda','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',135),
+  ('if -> IF expr TO expr ELSE expr END','if',7,'p_if','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',141),
+  ('terms -> LBRACE subterms COMMA term RBRACE','terms',5,'p_terms_head','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',147),
+  ('terms -> LBRACE subterms RBRACE','terms',3,'p_terms_single','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',153),
+  ('terms -> LBRACE RBRACE','terms',2,'p_terms_empty','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',159),
+  ('subterms -> subterms term','subterms',2,'p_subterms_list','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',165),
+  ('subterms -> term','subterms',1,'p_subterms','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',171),
+  ('term -> FLOAT','term',1,'p_term_float','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',177),
+  ('term -> INTEGER','term',1,'p_term_integer','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',183),
+  ('term -> STRING','term',1,'p_term_string','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',189),
+  ('term -> ATOM','term',1,'p_term_atom','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',195),
+  ('term -> terms','term',1,'p_term_terms','/Users/dab/Documents/Developpement/LAuREL-python/LAuREL/parser.py',201),
 ]

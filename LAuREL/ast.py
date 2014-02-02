@@ -21,10 +21,12 @@ def getTypeByName(name):
 	raise SyntaxError("Unknown type %s" % name)
 
 class Type:
+	s_tk = None
 	name = "Undefined"
 	value = None
 	
-	def __init__(self, value):
+	def __init__(self, s_tk, value):
+		self.s_tk = s_tk
 		self.value = value
 
 	def getValue(self):
@@ -32,6 +34,9 @@ class Type:
 
 	def getType(self):
 		return self.name
+
+	def getStk(self):
+		return self.s_tk
 
 class Integer(Type):
 	name = "Integer"
@@ -78,10 +83,12 @@ class List(Type):
 		return ("[" + name.getType() + "]")
 
 class Call:
+	s_tk = None
 	function = None
 	applied = []
 
-	def __init__(self, function, elements):
+	def __init__(self, s_tk, function, elements):
+		self.s_tk = s_tk
 		self.function = function
 		self.add(elements)
 
@@ -92,13 +99,18 @@ class Call:
 		else:
 			self.applied.append(element)
 
+	def getStk(self):
+		return self.s_tk
+
 class Function:
+	s_tk = None
 	name = None
 	types = []
 	internal_names = []
 	internals = None
 
-	def __init__(self, name, types, internal_names, internals):
+	def __init__(self, s_tk, name, types, internal_names, internals):
+		self.s_tk = s_tk
 		self.name = name 
 		self.types = types
 		self.internal_names = internal_names
@@ -113,19 +125,28 @@ class Function:
 	def getInternals(self):
 		return self.internals
 
+	def getStk(self):
+		return self.s_tk
+
 class Lambda(Function):
-	def __init__(self, internal_names, internals):
+	def __init__(self, s_tk, internal_names, internals):
+		self.s_tk = s_tk
 		self.name = generateRandomName()
-		self.types = [ast.Type for v in internal_names]
+		self.types = [Type for v in internal_names]
 		self.internal_names = internal_names
 		self.internals = internals
 
 class If:
+	s_tk = None
 	cond = True
 	ok = None
 	nope = None
 
-	def __init__(self, cond, ok, nope):
+	def __init__(self, s_tk, cond, ok, nope):
+		self.s_tk = s_tk
 		self.cond = cond
 		self.ok = ok 
 		self.nope = nope
+
+	def getStk(self):
+		return self.s_tk
