@@ -1,5 +1,3 @@
-dist/
-image.com
-image.txt
-*.o
-*.hi
+*.pyc
+parselog.txt
+parsetab.py
