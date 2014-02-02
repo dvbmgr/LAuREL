@@ -1,20 +1,12 @@
-
-main : None → None
-main a := 
-	a.
-
 add : String → String → Integer 
 add a b := 
 	(str_to_int a) + (str_to_int b).
-
 sub : String → String → Integer 
 sub a b := 
 	(str_to_int a) - (str_to_int b).
-
 mul : String → String → Integer 
 mul a b := 
 	(str_to_int a) * (str_to_int b).
-
 evalOp : String → Integer 
 evalOp s := 
 	(λa →
@@ -31,3 +23,6 @@ evalOp s :=
 				end)
 			end)
 		end)).
+main : None
+main := 
+	print (evalOp input).
