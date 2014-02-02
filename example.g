@@ -1,3 +1,4 @@
+
 main : None → None
 main a := 
 	a.
