@@ -1,177 +1,182 @@
 module LAuREL.Parser (parseLAuREL) where
 
-	import LAuREL.Types
-	import Text.ParserCombinators.Parsec
-	import Control.Applicative hiding (many, optional, (<|>))
-	import Data.Functor
+  import LAuREL.Types
+  import System.IO
+  import Control.Monad
+  import Control.Applicative ((<$>))
+  import Text.ParserCombinators.Parsec
+  import Text.ParserCombinators.Parsec.Expr
+  import Text.ParserCombinators.Parsec.Language
+  import qualified Text.ParserCombinators.Parsec.Token as Token
+
+  _prefix_opers = ["not", "¬"]
+  _infix_opers = ["+", "-", "*", "/", ":=", ">", "<", "<=", "≤", "⩽", ">=", "≥", "⩾", "eq", "==", "=", "neq", "/=", "≠", "and", "&&", "∧", "⋀", "or", "||", "∨", "⋁", "⊕", "⊗"]
+  _rassoc_opers = ["$"]
+
+  languageDef =
+    emptyDef { Token.commentStart
+                 = "{%",
+               Token.commentEnd
+                 = "%}",
+               Token.commentLine
+                 = "%",
+               Token.identStart
+                 = letter,
+               Token.identLetter
+                 = alphaNum <|> oneOf (['α'..'ω']++['Α'..'Ω']),
+               Token.reservedNames
+                 = [ "if", "else", "end", 
+                     "let", "in",
+                     "true", "false", 
+                     "->", "→", "λ", "\\", "=", ":" ],
+               Token.reservedOpNames
+                 = _infix_opers ++ _prefix_opers ++ _rassoc_opers,
+               Token.caseSensitive
+                 = True
+             }
+
+  lexer
+    = Token.makeTokenParser languageDef
+
+  identifier
+    = Token.identifier lexer
+  reserved
+    = Token.reserved lexer
+  comma
+    = Token.comma lexer
+  reservedOp
+    = Token.reservedOp lexer
+  parens
+    = Token.parens lexer
+  brackets
+    = Token.brackets lexer
+  integer
+    = Token.integer lexer
+  floating
+    = Token.float lexer
+  stringLiteral 
+    = Token.stringLiteral lexer
+  whiteSpace
+    = Token.whiteSpace lexer
+  type_
+    = (brackets type_ >>= \a -> return $ "["++a++"]") 
+      <|> do c <- upper 
+             cs <- many alphaNum
+             return (c:cs)
+  types
+    = sepBy type_ whiteSpace
+  types'
+    = sepBy1 type_ whiteSpace
+  arguments
+    = sepBy identifier whiteSpace
+  arguments'
+    = sepBy1 identifier whiteSpace
+
+  parseLAuREL :: 
+                 String
+              -> Expr
+  parseLAuREL input
+    = case parse laurelParser "" input of 
+        Right parsed -> Root parsed
+        Left err -> error $ show err
+
+  laurelParser :: 
+                  Parser Exprs
+  laurelParser
+    =  whiteSpace 
+    >> many1 functionDefinition
+
+  functionDefinition ::
+                        Parser Expr 
+  functionDefinition
+    = do name <- identifier
+         reserved ":"
+         types <- types'
+         string name
+         args <- arguments
+         reservedOp ":="
+         body <- statement
+         reserved "."
+         return Fun { funId = name,
+                      funDoc = Nothing,
+                      funType = types,
+                      funArgs = args,
+                      funMain = body }
 
 
-	-- |Parsing interface
-	parseLAuREL :: String -> Expr
-	parseLAuREL input = case parse parseAll "parse error" input of
-		Right parsed -> Root parsed
-		Left err -> error $ show err
+  statement :: 
+               Parser Expr
+  statement 
+    =   parens statement
+    <|> ifStatement
+    <|> lambdaStatement
+    <|> letStatement
+    <|> callStatement
+    <|> exprStatement
 
-	-- |Parses comments and functions
-	parseAll :: Parser Exprs
-	parseAll = spaces *> many1 ((try parseComment <|> parseFunction) <* optional newline) <* spaces
+  ifStatement :: 
+                 Parser Expr
+  ifStatement 
+    = do reserved "if"
+         condition <- exprStatement
+         reserved "->" <|> reserved "→"
+         ifpos <- statement
+         reserved "else"
+         ifneg <- statement
+         reserved "end"
+         return If { ifCond = condition,
+                     ifTrue = ifpos,
+                     ifFalse = ifneg }
 
-	-- |Parses comments
-	parseComment :: Parser Expr 
-	parseComment = do 
-		char '%'
-		spaces
-		d <- optionMaybe (try $ choice [string "author", string "date", string "license", string "version", string "name"] <* char ':' <* spaces)
-		spaces
-		c <- manyTill anyChar (try newline)
-		return $ Comment d c
+  lambdaStatement ::
+                     Parser Expr
+  lambdaStatement
+    = do reserved "λ" <|> reserved "\\"
+         args <- arguments'
+         reserved "->" <|> reserved "→"
+         body <- statement
+         return Lambda { lambdaArgs = args, 
+                         lambdaMain = body }
 
-	-- |Parses functions
-	parseFunction :: Parser Expr 
-	parseFunction = do
-		name <- (do
-			a <- lower 
-			b <- many (alphaNum <|> char '\'') 
-			return $ a:b)
-		spaces
-		char ':'
-		spaces
-		types <- sepBy1 (do 
-				spaces
-				t <- optional $ char '['
-				a <- upper
-				b <- many1 alphaNum 
-				optional $ char ']'
-				spaces
-				return $ a:b
-			) (string "->" <|> string "→")
-		spaces
-		doc <- optionMaybe (do
-			string "%"
-			spaces
-			c <- manyTill anyChar (try newline)
-			return $ c)
+  letStatement ::
+                  Parser Expr
+  letStatement
+    = do reserved "let"
+         name <- identifier
+         reservedOp ":="
+         value <- statement
+         reserved "in"
+         body <- statement
+         return Let { letName = name, 
+                      letValue = value,
+                      letMain = body }
 
-		optional newline
-		string name
-		args <- many (try $ do
-			spaces
-			a <- lower
-			b <- many (alphaNum <|> char '\'' <|> char '_')
-			return $ a:b)
-		spaces
-		char '='
-		spaces
-		d <- parseExpr
-		spaces
-		char '.'
-		spaces
-		return $ Fun name doc types args d 
+  callStatement ::
+                   Parser Expr
+  callStatement
+    = do name <- identifier
+         args <- many statement
+         return Call { callId = name,
+                       callArgs = args }
 
-	-- |Parses all inline expressions
-	parseExpr :: Parser Expr 
-	parseExpr = spaces *> (try parseLambda <|> try parseIf <|> try parseParenthsis <|> try parseFloat <|> try parseNumber <|> try parseString <|> try parseAtom <|> try parseFunctionCall <|> try parseOp) <* spaces
-
-	-- |Parses the operators
-	parseOp :: Parser Expr 
-	parseOp = do
-		char '<'
-		spaces
-		a <- parseExpr
-		spaces
-		o <- many1 $ oneOf "></=+-!$&|*@"
-		spaces
-		b <- parseExpr
-		char '>'
-		return $ Op o a b
-
-	-- |Parsing the if structures
-	parseIf :: Parser Expr
-	parseIf = do
-		string "if"
-		spaces
-		c <- parseExpr
-		spaces
-		string "->" <|> string "→"
-		spaces
-		a <- parseExpr
-		spaces
-		string "else"
-		spaces
-		b <- parseExpr
-		spaces
-		string "end"
-		return $ If c a b
-
-	-- |Parsing the parenthesis
-	parseParenthsis :: Parser Expr
-	parseParenthsis = do
-		between (char '(' <* optional spaces) (optional spaces *> char ')') parseExpr
-
-	-- |Parsing floating numbers
-	parseFloat :: Parser Expr 
-	parseFloat = do
-		d <- (do
-			s <- optionMaybe $ char '-'
-			a <- many digit
-			b <- char '.'
-			c <- many1 digit
-			return $ (case s of { Just _ -> '-'; Nothing -> '0' }):(if length a == 0 then "0" else a)++b:c)
-		return (Type (Float $ read d))
-
-	-- |Parsing numbers
-	parseNumber :: Parser Expr
-	parseNumber = do
-		s <- optionMaybe $ char '-'
-		d <- many1 digit 
-		return $ (Type (Integer $ read ((case s of { Just _ -> '-'; Nothing -> '0' }):d)))
-
-	-- |Parsing strings
-	parseString :: Parser Expr
-	parseString = do 
-		char '"'
-		c <- many $ noneOf "\""
-		char '"'
-		return $ Type (String c)
-
-	-- |Parsing atoms
-	parseAtom :: Parser Expr 
-	parseAtom = do
-		char ':'
-		n <- many lower
-		return $ Atom n
-
-	-- |Parsing functions call
-	parseFunctionCall :: Parser Expr
-	parseFunctionCall = do
-		name <- (do
-			a <- lower
-			b <- many (alphaNum <|> char '\'' <|> char '_')
-			return $ a:b)
-		spaces
-		args <- sepBy parseExpr (char ',')
-		return $ Call name args
-
-	-- |Parsing lambda-expressions
-	parseLambda :: Parser Expr
-	parseLambda = do
-		char '('
-		spaces
-		char '\\' <|> char 'λ'
-		spaces
-		args <- many (try $ do
-			spaces
-			a <- lower  <?> "Functions names must begin with a lower case"
-			b <- many (alphaNum <|> char '\'') <?> "Functions names must only contain chars, digits or \"'\""
-			return $ a:b)
-		spaces
-		string "->" <|> string "→"
-		spaces
-		e <- parseExpr
-		spaces
-		char ')'
-		spaces
-		callargs <- sepBy parseExpr (char ',')
-		return $ Lambda args e callargs
-
+  exprStatement :: 
+                 Parser Expr
+  exprStatement
+    = buildExpressionParser oOperators oTerms
+    where
+      oTerms
+        =   parens statement
+        <|> Type <$> dataP
+      dataP
+        =   (reserved "true" >> return $ Bool $ True)
+        <|> (reserved "false" >> return $ Bool $ False)
+        <|> (reservedOp "-" >> integer >>= return . Integer . (-) 0)
+        <|> (integer >>= return . Integer)
+        <|> (reservedOp "-" >> floating >>= return . Float . (-) 0)
+        <|> (floating >>= return . Float)
+        <|> (brackets (sepBy1 dataP comma) >>= return . List)
+        <|> (stringLiteral >>= return . String)
+      oOperators
+        =  [ [Infix  (reservedOp op >> return (Op op)) AssocLeft  ] | op <- _infix_opers ]
+        ++ [ [Infix  (reservedOp op >> return (Op op)) AssocRight ] | op <- _rassoc_opers ]
 

@@ -5,5 +5,5 @@
 
 main : None % Main
 main = 
-	print (
-		readfile input).
+	print
+		(readfile input).

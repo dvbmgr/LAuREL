@@ -33,8 +33,8 @@ evalOp a =
 		end
 	end.
 
-main : None % Main
+main : None % Mains
 main = 
-	<print "Hello" >>
+	<print "Hello" ;
 		(print (
 		evalOp input))>.

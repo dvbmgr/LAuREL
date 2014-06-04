@@ -18,13 +18,13 @@ mul a b =
 evalOp : String -> Integer % Evals a as an operator
 evalOp s = 
 	(λa ->
-		if << a@ 1> == "+"> →
+		if <(<a @ 1>) == "+"> →
 			add <a @ 0>, <a @ 2>
 		else
-			if <<a @ 1> == "-"> →
+			if <(<a @ 1>) == "-"> →
 				sub <a @ 0>, <a @ 2>
 			else
-				if (<<a @ 1> == "*">) →
+				if <(<a @ 1>) == "*"> →
 					mul <a @ 0>, <a @ 2>
 				else
 					error "Unsupported operation"
