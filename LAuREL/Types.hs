@@ -22,7 +22,7 @@ module LAuREL.Types where
           | Let { letName :: Id,
                   letValue :: Expr,
                   letMain :: Expr }
-          | Fun { funId :: Id,
+          | Fun { funId :: Id,
                   funDoc :: Doc,
                   funType :: FTypes,
                   funArgs :: Args,
@@ -42,7 +42,7 @@ module LAuREL.Types where
             String String
           | Bool Bool
           | Integer Int
-          | Float Float
+          | Float Double
           | List [VType]
           | Anything
           | None

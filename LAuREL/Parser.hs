@@ -3,14 +3,14 @@ module LAuREL.Parser (parseLAuREL) where
   import LAuREL.Types
   import System.IO
   import Control.Monad
-  import Control.Applicative ((<$>))
+  import Control.Applicative ((<$>), (<*), (*>))
   import Text.ParserCombinators.Parsec
   import Text.ParserCombinators.Parsec.Expr
   import Text.ParserCombinators.Parsec.Language
   import qualified Text.ParserCombinators.Parsec.Token as Token
 
   _prefix_opers = ["not", "¬"]
-  _infix_opers = ["+", "-", "*", "/", ":=", ">", "<", "<=", "≤", "⩽", ">=", "≥", "⩾", "eq", "==", "=", "neq", "/=", "≠", "and", "&&", "∧", "⋀", "or", "||", "∨", "⋁", "⊕", "⊗"]
+  _infix_opers = ["+", "-", "*", "/", ":=", ">", "<", "<=", "≤", "⩽", ">=", "≥", "⩾", "eq", "==", "=", "neq", "/=", "≠", "and", "&&", "∧", "⋀", "or", "||", "∨", "⋁", "⊕", "⊗", "@", "!"]
   _rassoc_opers = ["$"]
 
   languageDef =
@@ -23,7 +23,7 @@ module LAuREL.Parser (parseLAuREL) where
                Token.identStart
                  = letter,
                Token.identLetter
-                 = alphaNum <|> oneOf (['α'..'ω']++['Α'..'Ω']),
+                 = alphaNum <|> oneOf (['_']),
                Token.reservedNames
                  = [ "if", "else", "end", 
                      "let", "in",
@@ -59,18 +59,23 @@ module LAuREL.Parser (parseLAuREL) where
   whiteSpace
     = Token.whiteSpace lexer
   type_
-    = (brackets type_ >>= \a -> return $ "["++a++"]") 
-      <|> do c <- upper 
-             cs <- many alphaNum
-             return (c:cs)
+    =  whiteSpace
+    >> ((brackets type_ >>= \a -> return $ "["++a++"]") 
+        <|> do c <- upper 
+               cs <- many alphaNum
+               return (c:cs))
   types
-    = sepBy type_ whiteSpace
+    =  whiteSpace
+    >> sepBy type_ ((try $ whiteSpace *> reserved "->" <* whiteSpace) <|> (try $ whiteSpace *> reserved "→" <* whiteSpace))
   types'
-    = sepBy1 type_ whiteSpace
+    =  whiteSpace
+    >> sepBy1 type_ ((try $ whiteSpace *> reserved "->" <* whiteSpace) <|> (try $ whiteSpace *> reserved "→" <* whiteSpace))
   arguments
-    = sepBy identifier whiteSpace
+    =  whiteSpace
+    >> sepBy identifier whiteSpace
   arguments'
-    = sepBy1 identifier whiteSpace
+    =  whiteSpace
+    >> sepBy1 identifier whiteSpace
 
   parseLAuREL :: 
                  String
@@ -92,6 +97,7 @@ module LAuREL.Parser (parseLAuREL) where
     = do name <- identifier
          reserved ":"
          types <- types'
+         newline
          string name
          args <- arguments
          reservedOp ":="
@@ -107,12 +113,11 @@ module LAuREL.Parser (parseLAuREL) where
   statement :: 
                Parser Expr
   statement 
-    =   parens statement
+    =   exprStatement
     <|> ifStatement
     <|> lambdaStatement
     <|> letStatement
     <|> callStatement
-    <|> exprStatement
 
   ifStatement :: 
                  Parser Expr
@@ -123,8 +128,7 @@ module LAuREL.Parser (parseLAuREL) where
          ifpos <- statement
          reserved "else"
          ifneg <- statement
-         reserved "end"
-         return If { ifCond = condition,
+         return If { ifCond = condition,
                      ifTrue = ifpos,
                      ifFalse = ifneg }
 
@@ -155,7 +159,7 @@ module LAuREL.Parser (parseLAuREL) where
                    Parser Expr
   callStatement
     = do name <- identifier
-         args <- many statement
+         args <- many exprStatement
          return Call { callId = name,
                        callArgs = args }
 
@@ -166,16 +170,27 @@ module LAuREL.Parser (parseLAuREL) where
     where
       oTerms
         =   parens statement
+        <|> callStatement
         <|> Type <$> dataP
       dataP
-        =   (reserved "true" >> return $ Bool $ True)
-        <|> (reserved "false" >> return $ Bool $ False)
-        <|> (reservedOp "-" >> integer >>= return . Integer . (-) 0)
-        <|> (integer >>= return . Integer)
-        <|> (reservedOp "-" >> floating >>= return . Float . (-) 0)
-        <|> (floating >>= return . Float)
-        <|> (brackets (sepBy1 dataP comma) >>= return . List)
-        <|> (stringLiteral >>= return . String)
+        =   (do reserved "true"
+                return $ Bool $ True)
+        <|> (do reserved "false"
+                return $ Bool $ False)
+        <|> (do reservedOp "-"
+                i <- integer 
+                return $ Integer $ (-) 0 $ fromInteger i)
+        <|> (do i <- integer
+                return $ Integer $ fromInteger i)
+        <|> (do reservedOp "-"
+                f <- floating
+                return $ Float $ 0 - f)
+        <|> (do f <- floating
+                return $ Float f)
+        <|> (do l <- brackets (sepBy1 dataP comma)
+                return $ List l)
+        <|> (do s <- stringLiteral
+                return $ String s)
       oOperators
         =  [ [Infix  (reservedOp op >> return (Op op)) AssocLeft  ] | op <- _infix_opers ]
         ++ [ [Infix  (reservedOp op >> return (Op op)) AssocRight ] | op <- _rassoc_opers ]

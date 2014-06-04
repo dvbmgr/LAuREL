@@ -3,7 +3,7 @@
 % name: cat
 % author: David Baumgartner
 
-main : None % Main
-main = 
+main : None
+main := 
 	print
 		(readfile input).

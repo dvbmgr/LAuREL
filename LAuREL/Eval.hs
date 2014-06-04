@@ -7,7 +7,6 @@ module LAuREL.Eval where
   import Data.UUID.V4
   import Control.Monad
   import Control.Applicative ((<$>))
-  import System.IO.Unsafe
 
   -- |Evaluates the AST
   evaluateLAuREL ::
@@ -29,7 +28,7 @@ module LAuREL.Eval where
           in
             ex1 >>= \v1 ->
               ex2 >>= \v2 ->
-                unsafePerformIO $ (libFunFun eOp) lib [v1,v2]
+                (libFunFun eOp) lib [v1,v2]
       eval lib expr@(If{})
         = eExpr $ eval lib $ ifCond expr >>= \eCond ->
           case eCond of
