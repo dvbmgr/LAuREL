@@ -12,22 +12,22 @@ category:            Development
 build-type:          Simple
 cabal-version:       >=1.8
 
-library
-  hs-source-dirs: .
-  exposed-modules:
-    LAuREL.Doc
-    LAuREL.Eval
-    LAuREL.Lib 
-    LAuREL.Parser 
-    LAuREL.Types
-  build-depends:       base >=4.5, parsec ==3.1.*, MissingH ==1.2.*, uuid >= 1.2
+--library
+--  hs-source-dirs: .
+--  exposed-modules:
+--    LAuREL.Doc
+--    LAuREL.Eval
+--    LAuREL.Lib 
+--    LAuREL.Parser 
+--    LAuREL.Types
+--  build-depends:       base >=4.5, parsec ==3.1.*, MissingH ==1.2.*, uuid >= 1.2
 
 executable LAuREL
   main-is: LAuREL.hs
   build-depends:       base >=4.5, parsec ==3.1.*, MissingH ==1.2.*, uuid >= 1.2
  
-executable LAuRA
-  main-is: LAuRA.hs 
-  build-depends:       base >=4.5, parsec ==3.1.*, MissingH ==1.2.*, uuid >= 1.2
+--executable LAuRA
+--  main-is: LAuRA.hs 
+--  build-depends:       base >=4.5, parsec ==3.1.*, MissingH ==1.2.*, uuid >= 1.2
  
   
