@@ -3,6 +3,7 @@ module LAuREL.Lib (stdlib) where
 	import Data.Functor
 	import Data.String.Utils
 	import LAuREL.Types
+	import System.Random (getStdRandom, randomR)
 
 	o_add :: Lib -> [Expr] -> IO Evaluated
 	o_add lib [Type (Integer a), Type (Integer b)] =
@@ -33,6 +34,14 @@ module LAuREL.Lib (stdlib) where
 		return $ Evaluated lib $ return $ Type $ Bool $ a == b
 	b_eq lib [Type (String a), Type (String b)] =
 		return $ Evaluated lib $ return $ Type $ Bool $ a == b
+
+	b_sup :: Lib -> [Expr] -> IO Evaluated
+	b_sup lib [Type (Integer a), Type (Integer b)] =
+		return $ Evaluated lib $ return $ Type $ Bool $ a > b
+		
+	b_inf :: Lib -> [Expr] -> IO Evaluated
+	b_inf lib [Type (Integer a), Type (Integer b)] =
+		return $ Evaluated lib $ return $ Type $ Bool $ a < b
 
 	f_print :: Lib -> [Expr] -> IO Evaluated
 	f_print lib [Type _tg] 
@@ -65,6 +74,11 @@ module LAuREL.Lib (stdlib) where
 	f_readfile lib [Type (String a)] = 
 		return $ Evaluated lib (readFile a >>= return . Type . String)
 
+	f_random :: Lib -> [Expr] -> IO Evaluated
+	f_random lib [Type (Integer a), Type (Integer b)] =
+		do rand <- getStdRandom (randomR (a,b))
+		   return $ Evaluated lib $ return $ Type $ Integer rand
+
 	-- |The standard library
 	stdlib :: Lib
 	stdlib = Lib [
@@ -74,6 +88,8 @@ module LAuREL.Lib (stdlib) where
 				LibFunction "@" ["[String]", "Integer", "String"] ["a", "b"] o_at $ Just "Gets element b of a",
 				LibFunction ";" ["*", "*", "*"] ["a", "b"] o_forget $ Just "Removes the previous functions value",
 				LibFunction "==" ["Integer", "Integer", "Bool"] ["a", "b"] b_eq $ Just "Checks the equallity",
+				LibFunction ">" ["Integer", "Integer", "Bool"] ["a", "b"] b_sup $ Just "Checks the superiority",
+				LibFunction "<" ["Integer", "Integer", "Bool"] ["a", "b"] b_inf $ Just "Checks the superiority",
 				LibFunction "$" ["*", "*", "*"] ["a", "b"] o_pass $ Nothing,
 				LibFunction "str_to_int" ["String", "Integer"] ["a"] f_str_to_int $ Just "Converts string to integer",
 				LibFunction "str_to_float" ["String", "Float"] ["a"] f_str_to_float $ Just "Converts string to float",
@@ -81,5 +97,6 @@ module LAuREL.Lib (stdlib) where
 				LibFunction "print" ["String", "None"] ["a"] f_print $ Just "Prints a",
 				LibFunction "input" ["String"] [] f_input $ Just "Asks for input",
 				LibFunction "error" ["String", "*"] ["a"] f_error $ Just "Stops the program and shows the message",
-				LibFunction "readfile" ["String", "String"] ["a"] f_readfile $ Just "Reads the givent file"
+				LibFunction "readfile" ["String", "String"] ["a"] f_readfile $ Just "Reads the givent file",
+				LibFunction "random" ["Integer", "Integer"] ["a", "b"] f_random $ Just "Generates a random number between a and b"
 			 ]

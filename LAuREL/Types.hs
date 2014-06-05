@@ -80,7 +80,7 @@ module LAuREL.Types where
         show (Float a) = show a
         show (List a) = "["++(intercalate ", " $ map show a)++"]"
         show (Anything) = "*"
-        show (None) = "None"
+        show (None) = "()"
 
   data LibFunction = LibFunction { libFunId :: Id,
                                     libFunArgsType :: FTypes,

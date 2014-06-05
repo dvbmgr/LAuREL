@@ -10,7 +10,7 @@ module LAuREL.Parser (parseLAuREL) where
   import qualified Text.ParserCombinators.Parsec.Token as Token
 
   _prefix_opers = ["not", "¬"]
-  _infix_opers = ["+", "-", "*", "/", ":=", ">", "<", "<=", "≤", "⩽", ">=", "≥", "⩾", "eq", "==", "=", "neq", "/=", "≠", "and", "&&", "∧", "⋀", "or", "||", "∨", "⋁", "⊕", "⊗", "@", "!"]
+  _infix_opers = ["+", "-", "*", "/", ":=", ">", "<", "<=", "≤", "⩽", ">=", "≥", "⩾", "eq", "==", "=", "neq", "/=", "≠", "and", "&&", "∧", "⋀", "or", "||", "∨", "⋁", "⊕", "⊗", "@", "!", ">>"]
   _rassoc_opers = ["$"]
 
   languageDef =
